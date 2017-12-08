@@ -19,7 +19,7 @@ This project use [MongoDb](https://www.mongodb.com/mongodb-3.6) as database, it'
 
 ## Config File
 
-Change the file [./config/enverioment.config.js](https://github.com/olivermathe/core-server/blob/master/config/enverioment.config.js) with the preferencies of yours project enverioments.
+Change the file [./config/environment.config.js](https://github.com/olivermathe/core-server/blob/master/config/environment.config.js) with the preferencies of yours project enverioments.
 
 - db.host -> The host of your mongo database.
 - db.port -> The port where is runing your database.

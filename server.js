@@ -4,7 +4,7 @@ const
     Hapi    = require('hapi'),
     server  = new Hapi.Server(),
     builder = require('./engine/builder'),
-    config  = require('./config/enverioment.config');
+    config  = require('./config/environment.config');
 
 let env = process.argv[process.argv.length -1];
 
