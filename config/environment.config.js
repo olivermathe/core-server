@@ -7,7 +7,7 @@ module.exports = {
             pwd: '',
             user: '',
             port: '30050',
-            name: 'jiras'
+            name: 'database'
         },
         app: {
             port: 3000,
@@ -21,7 +21,7 @@ module.exports = {
             pwd: '',
             user: '',
             port: '30050',
-            name: 'jiras'
+            name: 'database'
         },
         app: {
             port: 8000,
@@ -35,7 +35,7 @@ module.exports = {
             pwd: '',
             user: '',
             port: '30050',
-            name: 'jiras'
+            name: 'database'
         },
         app: {
             port: 1337,
