@@ -6,15 +6,10 @@ const
     builder = require('./engine/builder'),
     config  = require('./config/environment.config');
 
-let env = process.argv[process.argv.length -1];
+let env = process.env.NODE_ENV;
 
-if (env === 'dev' || env === 'hml' || env === 'prd')
-    global.env = env;
-else
-    global.env = 'dev';
-
-global.APP_CONF = config[global.env].app;
-global.DB_CONF = config[global.env].db;
+global.APP_CONF = config[env].app;
+global.DB_CONF = config[env].db;
 
 server.connection({port: global.APP_CONF.port});
 

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    dev: {
+    development: {
         db: {
             host: 'localhost',
             pwd: '',
@@ -15,7 +15,7 @@ module.exports = {
             pubKey: `${process.cwd()}/config/jwtRS256.key.pub`
         }
     },
-    hml: {
+    homolog: {
         db: {
             host: 'localhost',
             pwd: '',
@@ -29,7 +29,7 @@ module.exports = {
             pubKey: `${process.cwd()}/config/jwtRS256.key.pub`
         }
     },
-    prd: {
+    production: {
         db: {
             host: 'localhost',
             pwd: '',
