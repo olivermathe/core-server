@@ -27,7 +27,7 @@ module.exports = {
     production : {
       key  : 'C:/Desenv/ec2-key.pem',
       user : 'ubuntu',
-      host : '54.233.99.26',
+      host : '54.233.196.110',
       ref  : 'origin/master',
       repo : 'git@github.com:olivermathe/core-server.git',
       path : '/home/ubuntu/www/core-server',
@@ -35,7 +35,7 @@ module.exports = {
     },
     homolog : {
       user : 'ubuntu',
-      host : '54.233.99.26',
+      host : '54.233.196.110',
       key  : 'C:/Desenv/ec2-key.pem',
       ref  : 'origin/homolog',
       repo : 'git@github.com:olivermathe/core-server.git',
