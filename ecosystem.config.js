@@ -31,7 +31,7 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'git@github.com:olivermathe/core-server.git',
       path : '/home/ubuntu/www/core-server',
-      'pre-setup'  : 'sudo su; apt-get -y install nodejs; apt-get -y install git',
+      'pre-setup'  : 'apt-get -y install nodejs; apt-get -y install git',
       'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production',
       env: {
         'NODE_ENV': 'production'
