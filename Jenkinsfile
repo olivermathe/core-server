@@ -1,11 +1,13 @@
 pipeline {
-  agent none
+  agent any
   stages {
     stage('Deploy') {
       steps {
-        sh '''cd C:\\Desenv\\outros\\core-server
-pm2 deploy production'''
+        echo 'Test message'
       }
     }
+  }
+  environment {
+    productio = ''
   }
 }
