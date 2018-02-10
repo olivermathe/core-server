@@ -1,13 +1,16 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'node'
+    }
+    
+  }
   stages {
-    stage('Deploy') {
+    stage('Initialize') {
       steps {
-        echo 'Test message'
+        sh '''node -v
+'''
       }
     }
-  }
-  environment {
-    productio = ''
   }
 }
