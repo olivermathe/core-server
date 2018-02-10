@@ -7,6 +7,7 @@ module.exports = {
     {
       name      : 'core-server',
       script    : 'server.js',
+      restart   : false,
       env_production : {
         NODE_ENV: 'production'
       },
