@@ -1,8 +1,8 @@
 pipeline {
   agent {
     docker {
-      image 'node/mongo'
       args '-p 3000:3000'
+      image 'node'
     }
     
   }
