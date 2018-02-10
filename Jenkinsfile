@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Deploy') {
       steps {
-        sh 'service mongod --port 30050 && npm install && npm start'
+        sh 'service mongod'
       }
     }
   }
