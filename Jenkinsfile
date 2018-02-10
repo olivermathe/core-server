@@ -7,7 +7,7 @@ pipeline {
     
   }
   stages {
-    stage('') {
+    stage('Deploy') {
       steps {
         sh '''service mongod --port 30050
 npm install
