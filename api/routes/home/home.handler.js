@@ -1,9 +1,9 @@
 'use strict';
 
 exports.home = (request, reply) => {
-    reply('Home');
+	reply('Home');
 };
 
 exports.teste = (request, reply) => {
-    reply('Teste');    
+	reply('Teste');    
 };

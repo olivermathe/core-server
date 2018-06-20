@@ -1,31 +1,30 @@
 'use strict';
 
-const 
-    Hapi    = require('hapi'),
-    server  = new Hapi.Server(),
-    builder = require('./engine/builder'),
-    config  = require('./config/environment.config');
+const { Server } = require('hapi');
+const Builder 	 = require('./engine/builder');
+const Config 	 = require('./config/environment.config');
 
-let env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV || 'development';
 
-global.APP_CONF = config[env].app;
-global.DB_CONF = config[env].db;
+global.APP_CONF = Config[env].app;
+global.DB_CONF = Config[env].db;
 
-server.connection({port: global.APP_CONF.port});
+(async () => {
 
-builder(server, error => {
+	try {
 
-    if (error)
-        throw error;
+		let server = new Server();
+		
+		server.connection({port: global.APP_CONF.port});
 
-    server.start(err => {
-        
-        if (err)
-            throw err;
+		await Builder(server);
 
-        console.log(`# Server running at: ${server.info.uri}`);
-        console.log();
-    
-    });
+		await server.start();
 
-});
+		console.info(`# Server running at: ${server.info.uri}`,'/n');
+
+	} catch (error) {
+		throw error;
+	}
+
+})();

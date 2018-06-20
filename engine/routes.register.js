@@ -4,36 +4,36 @@ const glob = require('glob');
 
 exports.register = (server, options, next) => {
 
-    const globOptions = {
-        nosort: true,
-        nodir: true,
-        strict: true
-    };
+	try {
 
-    let files = [];
-    let routes = null;
+		let globOptions = {
+			nosort: true,
+			nodir: true,
+			strict: true
+		};
 
-    try {
+		let files = [];
+		let routes = null;
 
-        options.routes.forEach(route => files = files.concat(glob.sync(route, globOptions)));
+		options.routes.forEach(route => files = files.concat(glob.sync(route, globOptions)));
 
-        files.forEach(path => {
+		files.forEach(path => {
 
-            routes = require(path);
+			routes = require(path);
 
-            routes.forEach(route => server.route(route));
+			routes.forEach(route => server.route(route));
 
-        });
+		});
 
-    } catch (error) {
-        throw error;
-    };
+		next();
 
-    next();
+	} catch (error) {
+		throw error;
+	}
 
 };
 
 exports.register.attributes = {
-    multiple: false,
-    pkg: require('../package.json')
+	multiple: false,
+	pkg: require('../package.json')
 };

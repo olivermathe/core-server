@@ -1,20 +1,20 @@
 const 
-    jwt = require('jsonwebtoken'),
-    fs = require('fs');
+	jwt = require('jsonwebtoken'),
+	fs = require('fs');
 
 exports.createToken = (credentials, cb) => {
 
-    const secret = global.APP_CONF.pvtKey;
+	const secret = global.APP_CONF.pvtKey;
 
-    const privateKey = fs.readFileSync(secret).toString()
+	const privateKey = fs.readFileSync(secret).toString();
 
-    jwt.sign(credentials, privateKey, {algorithm: 'RS256'}, (err, token) => {
+	jwt.sign(credentials, privateKey, {algorithm: 'RS256'}, (err, token) => {
 
-        if (err)
-            return cb(err);
+		if (err)
+			return cb(err);
 
-        return cb(null, token);
+		return cb(null, token);
 
-    });
+	});
 
 };

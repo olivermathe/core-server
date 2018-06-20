@@ -1,115 +1,91 @@
 'use strict';
 
-const 
-    routesReg = require('./routes.register'),
-    mongoose  = require('mongoose'),
-    jwt2      = require('hapi-auth-jwt2'),
-    fs        = require('fs'),
-    authFn    = require('./authValidateFn');
+const Fs 		= require('fs');
+const Mongoose 	= require('mongoose');
 
-module.exports = (server, cb) => {
+module.exports = async server => {
+	
+	try {
+		
+		await authStrategy(server);
 
-    authStrategy(server, authErr => {
+		await connectDatabase();
 
-        if (authErr)
-            return cb(authErr);
+		await loadRoutes(server);
 
-        connectDatabase(dbErr => {
+	} catch (error) {
+		throw error;
+	}
 
-            if (dbErr)
-                return cb(dbErr);
+};	
 
-            loadRoutes(server, routeErr => {
-                    
-                if (routeErr)
-                    return cb(routeErr);
+const loadRoutes = async server => {
 
-                return cb();
+	console.info('# Loading routes.');
 
-            });
+	let routesPath = '/api/routes/**/*.routes.js';
 
-        });
+	let config = {
+		register: require('./routes.register').register,
+		options: {
+			routes: [`${process.cwd()}${routesPath}`]
+		}
+	};
 
-    });
-
-};
-
-const loadRoutes = (server, cb) => {
-
-    console.log("# Loading routes.")
-
-    const routesPath = '/api/routes/**/*.routes.js'
-
-    let config = {
-        register: routesReg.register,
-        options: {
-            routes: [`${process.cwd()}${routesPath}`]
-        }
-    };
-
-    server.register(config, err => {
-
-        if (err)
-            return cb(err);
-
-        return cb();
-
-    });
+	return server.register(config);
 
 };
 
-const connectDatabase = cb => {
+const connectDatabase = async () => new Promise((resolve, reject) => {
 
-    console.log("# Connecting database.");
+	console.info('# Connecting database.');
 
-    let conf = global.DB_CONF
-    let auth = conf.user && conf.pwd ? `${conf.user}:${conf.pwd}@` : '';
-    let uri = `mongodb://${auth}${conf.host}:${conf.port}/${conf.name}`;
+	let conf = global.DB_CONF;
+	let auth = conf.user && conf.pwd ? `${conf.user}:${conf.pwd}@` : '';
+	let uri = `mongodb://${auth}${conf.host}:${conf.port}/${conf.name}`;
 
-    let options = {
-        useMongoClient: true
-    };
+	let options = {
+		useMongoClient: true
+	};
 
-    mongoose.connect(uri, options);
+	Mongoose.connect(uri, options);
+	
+	let db = Mongoose.connection;
 
-    let db = mongoose.connection;
-    
-    db.on('connected', () => {  
-        console.log(`# Connected at ${conf.host}:${conf.port}/${conf.name}.`);
-        cb()
-    }); 
-    
-    db.on('error', err => {  
-        console.log('# Connection fail.');
-        cb(err);
-    });
+	db.on('connected', () => {
+		console.info(`# Connected at ${conf.host}:${conf.port}/${conf.name}.`);
+		return resolve(db);
+	});
+	
+	db.on('error', err => {
+		console.error('# Connection fail.');
+		return reject(err);
+	});
 
-};
+});
 
-const authStrategy = (server, cb) => {
+const authStrategy = async server => new Promise((resolve, reject) => {
+		
+	console.info('# Starting jwt strategy.');
 
-    console.log("# Starting jwt strategy.")
+	let secret = global.APP_CONF.pubKey;
+	
+	let validateFunc = (decode, request, cb) => cb(null, !decode.email || !decode.pwd ? false : true);
 
-    let secret = global.APP_CONF.pubKey;
+	let options = {
+		key: Fs.readFileSync(secret).toString(),
+		validateFunc,
+		verifyOptions: {
+			algorithms: ['RS256']
+		}
+	};
 
-    const options = {
-        key: fs.readFileSync(secret).toString(),
-        validateFunc: authFn,
-        verifyOptions: {
-            algorithms: ['RS256']
-        }
-    };
+	server.register(require('hapi-auth-jwt2'))
+		.then(() => {
+			server.auth.strategy('jwt', 'jwt', options);
+			return resolve();
+		})
+		.catch(err => reject(err));
 
-    server.register(jwt2, err => {
-        
-        if(err)
-            return cb(err);
-    
-        server.auth.strategy('jwt', 'jwt', true, options);
-    
-        return cb(null);
-
-    });
-
-};
+});
 
