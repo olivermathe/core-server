@@ -1,21 +1,18 @@
-'use strict';
-
-const 
-	user = require('../../controllers/user.controller'),
-	crypto = require('../../helpers/crypto.helper'),
-	auth = require('../../helpers/auth.helper'),
-	boom = require('boom');
+const User = require('../../controllers/user.controller');
+const Crypto = require('../../helpers/crypto.helper');
+const Auth = require('../../helpers/auth.helper');
+const Boom = require('boom');
 
 exports.create = (payload, reply) => {
 
-	crypto.genPwd(payload.pwd, (pwdErr, hash) => {
+	Crypto.genPwd(payload.pwd, (pwdErr, hash) => {
 
 		if (pwdErr)
 			return reply(boom.boomify(pwdErr));
 
 		payload.pwd = hash;
 
-		user.create(payload, (createErr, result) => {
+		User.create(payload, (createErr, result) => {
 
 			if (createErr)
 				return reply(boom.boomify(createErr));
@@ -32,7 +29,7 @@ exports.login = (payload, reply) => {
 
 	let query = {email: payload.email};
 
-	user.findOne(query, (findErr, result) => {
+	User.findOne(query, (findErr, result) => {
 
 		if (findErr)
 			return reply(boom.boomify(findErr));
@@ -40,7 +37,7 @@ exports.login = (payload, reply) => {
 		if (!result)
 			return reply(null, 'NOT_FOUND');
 
-		crypto.validatePwd(payload.pwd, result.pwd, (validErr, isValid) => {
+		Crypto.validatePwd(payload.pwd, result.pwd, (validErr, isValid) => {
 
 			if (validErr)
 				return reply(boom.boomify(validErr));
@@ -50,7 +47,7 @@ exports.login = (payload, reply) => {
 
 			let credentials = {pwd: result.pwd, email: result.email};
 
-			auth.createToken(credentials, (tokenErr, token) => {
+			Auth.createToken(credentials, (tokenErr, token) => {
 
 				if (tokenErr)
 					return reply(boom.boomify(tokenErr));
@@ -67,7 +64,7 @@ exports.login = (payload, reply) => {
 
 exports.getById = (id, reply) => {
 
-	user.getById(id, (err, result) => {
+	User.getById(id, (err, result) => {
 
 		if (err)
 			return reply(boom.boomify(err));

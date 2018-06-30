@@ -1,60 +1,58 @@
-'use strict';
-
 const User = require('../models/user.model');
 
 exports.create = (body, cb) => {
 
-	try {
+    try {
 
-		User.create(body, (err, result) => {
+        User.create(body, (err, result) => {
 
-			if (err)
-				return cb(err);
+            if (err)
+                return cb(err);
 
-			return cb(null, result);
+            return cb(null, result);
 
-		});
+        });
 
-	} catch (error) {
-		return cb(error);    
-	}
+    } catch (error) {
+        return cb(error);    
+    }
 
 };
 
 exports.findOne = (query, cb) => {
 
-	try {
-		
-		User.findOne(query, (err, result) => {
+    try {
+        
+        User.findOne(query, (err, result) => {
 
-			if (err)
-				return cb(err);
+            if (err)
+                return cb(err);
 
-			return cb(null, result);
+            return cb(null, result);
 
-		});
+        });
 
-	} catch (error) {
-		return cb(error);
-	}
-	
+    } catch (error) {
+        return cb(error);
+    }
+    
 };
 
 exports.getById = (id, cb) => {
-	
-	try {
+    
+    try {
 
-		User.findById(id, (err, result) => {
+        User.findById(id, (err, result) => {
 
-			if (err)
-				return cb(err);
+            if (err)
+                return cb(err);
 
-			return cb(null, result);
+            return cb(null, result);
 
-		});
+        });
 
-	} catch (error) {
-		return cb(error);    
-	}
+    } catch (error) {
+        return cb(error);    
+    }
 
 };
