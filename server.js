@@ -1,6 +1,6 @@
 const { Server } = require('hapi');
-const Builder 	 = require('./engine/builder');
-const Config 	 = require('./config/environment.config');
+const Builder = require('./engine/builder');
+const Config = require('./config/environment.config');
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -22,7 +22,7 @@ global.DB_CONF = Config[env].db;
         console.info(`# Server running at: ${server.info.uri}`,'/n');
 
     } catch (error) {
-        throw error;
+        console.error(error)
     }
 
 })();

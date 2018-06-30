@@ -30,11 +30,11 @@ const loadRoutes = async server => {
         }
     };
 
-    return server.register(config);
+    await server.register(config);
 
 };
 
-const connectDatabase = async () => new Promise((resolve, reject) => {
+const connectDatabase = () => new Promise((resolve, reject) => {
 
     console.info('# Connecting database.');
 
@@ -62,28 +62,31 @@ const connectDatabase = async () => new Promise((resolve, reject) => {
 
 });
 
-const authStrategy = async server => new Promise((resolve, reject) => {
+const authStrategy = async server => {
+
+    try {
+
+        console.info('# Starting jwt strategy.');
+
+        let secret = global.APP_CONF.pubKey;
         
-    console.info('# Starting jwt strategy.');
+        let validateFunc = (decode, request, cb) => cb(null, !decode.email || !decode.pwd ? false : true);
 
-    let secret = global.APP_CONF.pubKey;
-    
-    let validateFunc = (decode, request, cb) => cb(null, !decode.email || !decode.pwd ? false : true);
+        let options = {
+            key: Fs.readFileSync(secret).toString(),
+            validateFunc,
+            verifyOptions: {
+                algorithms: ['RS256']
+            }
+        };
 
-    let options = {
-        key: Fs.readFileSync(secret).toString(),
-        validateFunc,
-        verifyOptions: {
-            algorithms: ['RS256']
-        }
-    };
+        await server.register(require('hapi-auth-jwt2'));
 
-    server.register(require('hapi-auth-jwt2'))
-        .then(() => {
-            server.auth.strategy('jwt', 'jwt', options);
-            return resolve();
-        })
-        .catch(err => reject(err));
+        server.auth.strategy('jwt', 'jwt', options);
 
-});
+    } catch (error) {
+        throw error;
+    }
+
+};
 
