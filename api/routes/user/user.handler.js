@@ -1,7 +1,6 @@
 const Boom = require('boom');
 const User = require('../../controllers/user.controller');
-const Crypto = require('../../helpers/crypto.helper');
-const Auth = require('../../helpers/auth.helper');
+const { AuthHelper, CryptHelper } = require('../../helpers');
 
 exports.create = async (payload, reply) => {
 
@@ -9,7 +8,7 @@ exports.create = async (payload, reply) => {
 
         const user = payload;
 
-        const hash = await Crypto.genHash(payload.pwd);
+        const hash = await CryptHelper.genHash(payload.pwd);
 
         user.pwd = hash;
 
@@ -33,7 +32,7 @@ exports.login = async (payload, reply) => {
         if (!result)
             return reply(null, 'NOT_FOUND');
 
-        const isValidPwd = Crypto.validatePwd(payload.pwd, result.pwd);
+        const isValidPwd = CryptHelper.validatePwd(payload.pwd, result.pwd);
 
         if (!isValidPwd)
             return reply(null, 'INVALID');
@@ -43,7 +42,7 @@ exports.login = async (payload, reply) => {
             email: result.email,
         };
 
-        const token = Auth.createToken(credentials);
+        const token = AuthHelper.createToken(credentials);
 
         return reply(null, result).header('Authorization', token);
 
