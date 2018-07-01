@@ -1,5 +1,7 @@
 # core-server
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ed2421f9fcbc47b8bfd242d4ff10fce3)](https://app.codacy.com/app/olivermathe/core-server?utm_source=github.com&utm_medium=referral&utm_content=olivermathe/core-server&utm_campaign=badger)
+
 This is a basic nodejs server with jwt authentication.
 
 ## Dependencies
