@@ -2,24 +2,20 @@ const Bcrypt = require('bcrypt');
 
 const rounds = 13;
 
-exports.genPwd = pwd => new Promise((resolve, reject) => {
+exports.genHash = pwd => {
 
-    Bcrypt.genSalt(rounds, (saltErr, salt) => {
+    try {
 
-        if (saltErr)
-            return reject(saltErr);
+        const salt = Bcrypt.genSaltSync(rounds);
 
-        Bcrypt.hash(pwd, salt, (hashErr, hash) => {
+        const hash = Bcrypt.hashSync(pwd, salt);
 
-            if (hashErr)
-                return reject(hashErr);
+        return hash;
 
-            return resolve(hash);
+    } catch (error) {
+        throw error;
+    }
 
-        });
-
-    });
-
-});
+};
 
 exports.validatePwd = (pwd, hash) => Bcrypt.compareSync(pwd, hash);

@@ -1,20 +1,22 @@
+const Boom = require('boom');
 const User = require('../../controllers/user.controller');
 const Crypto = require('../../helpers/crypto.helper');
 const Auth = require('../../helpers/auth.helper');
-const Boom = require('boom');
 
 exports.create = async (payload, reply) => {
 
     try {
 
-        const hash = await Crypto.genPwd(payload.pwd);
+        const user = payload;
 
-        payload.pwd = hash;
+        const hash = await Crypto.genHash(payload.pwd);
 
-        const result = await User.create(payload);
+        user.pwd = hash;
+
+        const result = await User.create(user);
 
         return reply(null, result);
-        
+
     } catch (error) {
         console.error(error);
         return reply(Boom.boomify(error));
@@ -26,7 +28,7 @@ exports.login = async (payload, reply) => {
 
     try {
 
-        const result = await User.findOne({email: payload.email});
+        const result = await User.findOne({ email: payload.email });
 
         if (!result)
             return reply(null, 'NOT_FOUND');
@@ -38,7 +40,7 @@ exports.login = async (payload, reply) => {
 
         const credentials = {
             pwd: result.pwd,
-            email: result.email
+            email: result.email,
         };
 
         const token = Auth.createToken(credentials);

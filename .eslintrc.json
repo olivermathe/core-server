@@ -1,0 +1,12 @@
+{
+    "extends": "airbnb-base",
+    "rules": {
+        "indent": ["error", 4],
+        "padded-blocks": "off",
+        "arrow-parens": "off",
+        "no-use-before-define": "off",
+        "curly": "off",
+        "nonblock-statement-body-position": ["error", "below"],
+        "no-console": ["error", {"allow": ["info", "error"]}]
+    }
+}

@@ -1,23 +1,24 @@
 const Glob = require('glob');
+const Pkg = require('../package.json');
 
 exports.register = (server, options, next) => {
 
     try {
 
-        let globOptions = {
+        const globOptions = {
             nosort: true,
             nodir: true,
-            strict: true
+            strict: true,
         };
 
         let files = [];
         let routes = null;
 
-        options.routes.forEach(route => files = files.concat(Glob.sync(route, globOptions)));
+        options.routes.forEach(route => files = files.concat(Glob.sync(route, globOptions))); //eslint-disable-line
 
         files.forEach(path => {
 
-            routes = require(path);
+            routes = require(path); //eslint-disable-line
 
             routes.forEach(route => server.route(route));
 
@@ -33,5 +34,5 @@ exports.register = (server, options, next) => {
 
 exports.register.attributes = {
     multiple: false,
-    pkg: require('../package.json')
+    pkg: Pkg,
 };
