@@ -23,6 +23,7 @@ global.DB_CONF = Config[env].db;
 
     } catch (error) {
         console.error(error);
+        process.exit(1);
     }
 
 })();
