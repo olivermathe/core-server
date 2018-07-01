@@ -22,7 +22,7 @@ global.DB_CONF = Config[env].db;
         console.info(`# Server running at: ${server.info.uri}`, '/n');
 
     } catch (error) {
-        console.error(error);
+        console.log(error);
     }
 
 })();
