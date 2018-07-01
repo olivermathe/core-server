@@ -16,7 +16,7 @@
   "author": "Matheus Oliveira",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^2.0.1",
     "boom": "^7.2.0",
     "glob": "^7.1.2",
     "hapi": "^16.6.3",

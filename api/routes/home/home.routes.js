@@ -1,16 +1,14 @@
-'use strict';
-
-const handler = require('./home.handler');
+const Handler = require('./home.handler');
 
 module.exports = [
-	{
-		method: 'GET',
-		path: '/',
-		handler: handler.home
-	},
-	{
-		method: 'GET',
-		path: '/teste',
-		handler: handler.teste
-	}
+    {
+        method: 'GET',
+        path: '/',
+        handler: (request, reply) => Handler.home(request, reply)
+    },
+    {
+        method: 'GET',
+        path: '/teste',
+        handler: (request, reply) => Handler.teste(request, reply)
+    }
 ];

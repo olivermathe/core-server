@@ -1,20 +1,19 @@
-const 
-	handler = require('./user.handler'),
-	joi = require('joi');
+const Handler = require('./user.Handler');
+const Joi = require('joi');
 
 module.exports = [
 	{
 		method: 'PUT',
 		path: '/user/create',
-		handler: (request, reply) => handler.create(request.payload, reply),
+		handler: (request, reply) => Handler.create(request.payload, reply),
 		config: {
 			description: 'Create new user',
-			auth: 'jwt',
+			// auth: 'jwt',
 			validate: {
 				payload: {
-					name: joi.string().required(),
-					pwd: joi.string().required(),
-					email: joi.string().email().required()
+					name: Joi.string().required(),
+					pwd: Joi.string().required(),
+					email: Joi.string().email().required()
 				}
 			}
 		}
@@ -22,14 +21,14 @@ module.exports = [
 	{
 		method: 'POST',
 		path: '/user/login',
-		handler: (request, reply) => handler.login(request.payload, reply),
+		handler: (request, reply) => Handler.login(request.payload, reply),
 		config: {
 			description: 'Login',
 			auth: false,
 			validate: {
 				payload: {
-					pwd: joi.string().required(),
-					email: joi.string().email().required()
+					pwd: Joi.string().required(),
+					email: Joi.string().email().required()
 				}
 			}
 		}
@@ -37,7 +36,7 @@ module.exports = [
 	{
 		method: 'GET',
 		path: '/user/{id}',
-		handler: (request, reply) => handler.getById(request.params.id, reply),
+		handler: (request, reply) => Handler.getById(request.params.id, reply),
 		config: {
 			description: 'Create new user',
 			auth: 'jwt'

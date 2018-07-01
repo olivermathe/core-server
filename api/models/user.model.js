@@ -1,25 +1,22 @@
-'use strict';
+const Mongoose = require('mongoose');
+const Schema = Mongoose.Schema;
 
-const 
-	mongoose = require('mongoose'),
-	Schema = mongoose.Schema;
-
-let UserSchema = new Schema({
-	name: {
-		type: String,
-		required: true
-	},
-	pwd: {
-		type: String,
-		required: true
-	},
-	email: {
-		type: String,
-		required: true,
-		unique: true,
-		sparse: true,
-		index: true
-	}
+const UserSchema = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    pwd: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        sparse: true,
+        index: true
+    }
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = Mongoose.model('User', UserSchema);

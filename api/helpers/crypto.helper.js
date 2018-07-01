@@ -1,36 +1,25 @@
-const bcrypt = require('bcrypt');
+const Bcrypt = require('bcrypt');
 
 const rounds = 13;
 
-exports.genPwd = (pwd, cb) => {
+exports.genPwd = pwd => new Promise((resolve, reject) => {
 
-	bcrypt.genSalt(rounds, (saltErr, salt) => {
+    Bcrypt.genSalt(rounds, (saltErr, salt) => {
 
-		if (saltErr)
-			return cb(saltErr);
+        if (saltErr)
+            return reject(saltErr);
 
-		bcrypt.hash(pwd, salt, (hashErr, hash) => {
+        Bcrypt.hash(pwd, salt, (hashErr, hash) => {
 
-			if (hashErr)
-				return cb(hashErr);
+            if (hashErr)
+                return reject(hashErr);
 
-			return cb(null, hash);
+            return resolve(hash);
 
-		});
+        });
 
-	});
+    });
 
-};
+});
 
-exports.validatePwd = (pwd, hash, cb) => {
-	
-	bcrypt.compare(pwd, hash, (err, res) => {
-
-		if (err)
-			return cb(err);
-
-		return cb(null, res);
-
-	});
-
-};
+exports.validatePwd = (pwd, hash) => Bcrypt.compareSync(pwd, hash);

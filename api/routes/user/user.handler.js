@@ -1,79 +1,68 @@
-'use strict';
+const User = require('../../controllers/user.controller');
+const Crypto = require('../../helpers/crypto.helper');
+const Auth = require('../../helpers/auth.helper');
+const Boom = require('boom');
 
-const 
-	user = require('../../controllers/user.controller'),
-	crypto = require('../../helpers/crypto.helper'),
-	auth = require('../../helpers/auth.helper'),
-	boom = require('boom');
+exports.create = async (payload, reply) => {
 
-exports.create = (payload, reply) => {
+    try {
 
-	crypto.genPwd(payload.pwd, (pwdErr, hash) => {
+        const hash = await Crypto.genPwd(payload.pwd);
 
-		if (pwdErr)
-			return reply(boom.boomify(pwdErr));
+        payload.pwd = hash;
 
-		payload.pwd = hash;
+        const result = await User.create(payload);
 
-		user.create(payload, (createErr, result) => {
-
-			if (createErr)
-				return reply(boom.boomify(createErr));
-
-			return reply(null, result);
-
-		});
-		
-	});
+        return reply(null, result);
+        
+    } catch (error) {
+        console.error(error);
+        return reply(Boom.boomify(error));
+    }
 
 };
 
-exports.login = (payload, reply) => {
+exports.login = async (payload, reply) => {
 
-	let query = {email: payload.email};
+    try {
 
-	user.findOne(query, (findErr, result) => {
+        const result = await User.findOne({email: payload.email});
 
-		if (findErr)
-			return reply(boom.boomify(findErr));
+        if (!result)
+            return reply(null, 'NOT_FOUND');
 
-		if (!result)
-			return reply(null, 'NOT_FOUND');
+        const isValidPwd = Crypto.validatePwd(payload.pwd, result.pwd);
 
-		crypto.validatePwd(payload.pwd, result.pwd, (validErr, isValid) => {
+        if (!isValidPwd)
+            return reply(null, 'INVALID');
 
-			if (validErr)
-				return reply(boom.boomify(validErr));
+        const credentials = {
+            pwd: result.pwd,
+            email: result.email
+        };
 
-			if (!isValid)
-				return reply(null, 'INVALID');
+        const token = Auth.createToken(credentials);
 
-			let credentials = {pwd: result.pwd, email: result.email};
+        return reply(null, result).header('Authorization', token);
 
-			auth.createToken(credentials, (tokenErr, token) => {
-
-				if (tokenErr)
-					return reply(boom.boomify(tokenErr));
-
-				return reply(null, result).header('Authorization', token);
-
-			});
-
-		});
-
-	});
+    } catch (error) {
+        console.error(error);
+        return reply(Boom.boomify(error));
+    }
 
 };
 
-exports.getById = (id, reply) => {
+exports.getById = async (id, reply) => {
 
-	user.getById(id, (err, result) => {
+    try {
 
-		if (err)
-			return reply(boom.boomify(err));
+        const result = await User.getById(id);
 
-		return reply(null, result);
+        return reply(null, result);
 
-	});
+    } catch (error) {
+        console.error(error);
+        return reply(Boom.boomify(error));
+    }
 
 };
