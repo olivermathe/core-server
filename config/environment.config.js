@@ -2,8 +2,8 @@ module.exports = {
 	development: {
 		db: {
 			host: 'ds021884.mlab.com',
-			pwd: '',
-			user: '',
+			pwd: 'valor123',
+			user: 'aplication',
 			port: '21884',
 			name: 'billsbase'
 		},

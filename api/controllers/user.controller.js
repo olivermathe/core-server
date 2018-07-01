@@ -1,58 +1,40 @@
 const User = require('../models/user.model');
 
-exports.create = (body, cb) => {
+exports.create = body => new Promise((resolve, reject) => {
 
-    try {
+    User.create(body, (err, result) => {
 
-        User.create(body, (err, result) => {
+        if (err)
+            return reject(err);
 
-            if (err)
-                return cb(err);
+        return resolve(result);
 
-            return cb(null, result);
+    });
 
-        });
+});
 
-    } catch (error) {
-        return cb(error);    
-    }
-
-};
-
-exports.findOne = (query, cb) => {
-
-    try {
-        
-        User.findOne(query, (err, result) => {
-
-            if (err)
-                return cb(err);
-
-            return cb(null, result);
-
-        });
-
-    } catch (error) {
-        return cb(error);
-    }
+exports.findOne = query => new Promise((resolve, reject) => {
     
-};
+    User.findOne(query, (err, result) => {
 
-exports.getById = (id, cb) => {
+        if (err)
+            return reject(err);
+
+        return resolve(result);
+
+    });
     
-    try {
+});
 
-        User.findById(id, (err, result) => {
+exports.getById = id => new Promise((resolve, reject) => {
 
-            if (err)
-                return cb(err);
+    User.findById(id, (err, result) => {
 
-            return cb(null, result);
+        if (err)
+            return reject(err);
 
-        });
+        return resolve(result);
 
-    } catch (error) {
-        return cb(error);    
-    }
+    });
 
-};
+});

@@ -21,9 +21,9 @@ const loadRoutes = async server => {
 
     console.info('# Loading routes.');
 
-    let routesPath = '/api/routes/**/*.routes.js';
+    const routesPath = '/api/routes/**/*.routes.js';
 
-    let config = {
+    const config = {
         register: require('./routes.register').register,
         options: {
             routes: [`${process.cwd()}${routesPath}`]
@@ -38,17 +38,17 @@ const connectDatabase = () => new Promise((resolve, reject) => {
 
     console.info('# Connecting database.');
 
-    let conf = global.DB_CONF;
-    let auth = conf.user && conf.pwd ? `${conf.user}:${conf.pwd}@` : '';
-    let uri = `mongodb://${auth}${conf.host}:${conf.port}/${conf.name}`;
+    const conf = global.DB_CONF;
+    const auth = conf.user && conf.pwd ? `${conf.user}:${conf.pwd}@` : '';
+    const uri = `mongodb://${auth}${conf.host}:${conf.port}/${conf.name}`;
 
-    let options = {
+    const options = {
         useMongoClient: true
     };
 
     Mongoose.connect(uri, options);
     
-    let db = Mongoose.connection;
+    const db = Mongoose.connection;
 
     db.on('connected', () => {
         console.info(`# Connected at ${conf.host}:${conf.port}/${conf.name}.`);
@@ -68,11 +68,11 @@ const authStrategy = async server => {
 
         console.info('# Starting jwt strategy.');
 
-        let secret = global.APP_CONF.pubKey;
+        const secret = global.APP_CONF.pubKey;
         
-        let validateFunc = (decode, request, cb) => cb(null, !decode.email || !decode.pwd ? false : true);
+        const validateFunc = (decode, request, cb) => cb(null, !decode.email || !decode.pwd ? false : true);
 
-        let options = {
+        const options = {
             key: Fs.readFileSync(secret).toString(),
             validateFunc,
             verifyOptions: {

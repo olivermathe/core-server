@@ -4,11 +4,11 @@ module.exports = [
     {
         method: 'GET',
         path: '/',
-        handler: Handler.home
+        handler: (request, reply) => Handler.home(request, reply)
     },
     {
         method: 'GET',
         path: '/teste',
-        handler: Handler.teste
+        handler: (request, reply) => Handler.teste(request, reply)
     }
 ];

@@ -1,7 +1,3 @@
-exports.home = (request, reply) => {
-    reply('Home');
-};
+exports.home = (request, reply) => reply('Home');
 
-exports.teste = (request, reply) => {
-    reply('Teste');    
-};
+exports.teste = (request, reply) => reply('Teste');

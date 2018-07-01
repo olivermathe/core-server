@@ -8,7 +8,7 @@ module.exports = [
 		handler: (request, reply) => Handler.create(request.payload, reply),
 		config: {
 			description: 'Create new user',
-			auth: 'jwt',
+			// auth: 'jwt',
 			validate: {
 				payload: {
 					name: Joi.string().required(),
