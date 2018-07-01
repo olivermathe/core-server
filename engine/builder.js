@@ -1,10 +1,12 @@
 const Fs = require('fs');
 const Mongoose = require('mongoose');
+const Jwt = require('hapi-auth-jwt2');
+const RoutesRegister = require('./routes.register');
 
 module.exports = async server => {
-    
+
     try {
-        
+
         await authStrategy(server);
 
         await connectDatabase();
@@ -15,7 +17,7 @@ module.exports = async server => {
         throw error;
     }
 
-};	
+};
 
 const loadRoutes = async server => {
 
@@ -24,10 +26,10 @@ const loadRoutes = async server => {
     const routesPath = '/api/routes/**/*.routes.js';
 
     const config = {
-        register: require('./routes.register').register,
+        register: RoutesRegister.register,
         options: {
-            routes: [`${process.cwd()}${routesPath}`]
-        }
+            routes: [`${process.cwd()}${routesPath}`],
+        },
     };
 
     await server.register(config);
@@ -43,18 +45,18 @@ const connectDatabase = () => new Promise((resolve, reject) => {
     const uri = `mongodb://${auth}${conf.host}:${conf.port}/${conf.name}`;
 
     const options = {
-        useMongoClient: true
+        useMongoClient: true,
     };
 
     Mongoose.connect(uri, options);
-    
+
     const db = Mongoose.connection;
 
     db.on('connected', () => {
         console.info(`# Connected at ${conf.host}:${conf.port}/${conf.name}.`);
         return resolve(db);
     });
-    
+
     db.on('error', err => {
         console.error('# Connection fail.');
         return reject(err);
@@ -69,18 +71,18 @@ const authStrategy = async server => {
         console.info('# Starting jwt strategy.');
 
         const secret = global.APP_CONF.pubKey;
-        
-        const validateFunc = (decode, request, cb) => cb(null, !decode.email || !decode.pwd ? false : true);
+
+        const validateFunc = (decode, request, cb) => cb(null, decode.email && decode.pwd);
 
         const options = {
             key: Fs.readFileSync(secret).toString(),
             validateFunc,
             verifyOptions: {
-                algorithms: ['RS256']
-            }
+                algorithms: ['RS256'],
+            },
         };
 
-        await server.register(require('hapi-auth-jwt2'));
+        await server.register(Jwt);
 
         server.auth.strategy('jwt', 'jwt', options);
 
@@ -89,4 +91,3 @@ const authStrategy = async server => {
     }
 
 };
-

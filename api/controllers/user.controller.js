@@ -14,7 +14,7 @@ exports.create = body => new Promise((resolve, reject) => {
 });
 
 exports.findOne = query => new Promise((resolve, reject) => {
-    
+
     User.findOne(query, (err, result) => {
 
         if (err)
@@ -23,7 +23,7 @@ exports.findOne = query => new Promise((resolve, reject) => {
         return resolve(result);
 
     });
-    
+
 });
 
 exports.getById = id => new Promise((resolve, reject) => {

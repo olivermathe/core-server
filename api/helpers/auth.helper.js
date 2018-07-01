@@ -9,7 +9,7 @@ exports.createToken = credentials => {
 
         const privateKey = Fs.readFileSync(secret).toString();
 
-        const token = Jwt.sign(credentials, privateKey, {algorithm: 'RS256'});
+        const token = Jwt.sign(credentials, privateKey, { algorithm: 'RS256' });
 
         return token;
 

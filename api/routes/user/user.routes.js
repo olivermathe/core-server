@@ -1,5 +1,5 @@
-const Handler = require('./user.Handler');
 const Joi = require('joi');
+const Handler = require('./user.handler');
 
 module.exports = [
     {
@@ -13,10 +13,10 @@ module.exports = [
                 payload: {
                     name: Joi.string().required(),
                     pwd: Joi.string().required(),
-                    email: Joi.string().email().required()
-                }
-            }
-        }
+                    email: Joi.string().email().required(),
+                },
+            },
+        },
     },
     {
         method: 'POST',
@@ -28,10 +28,10 @@ module.exports = [
             validate: {
                 payload: {
                     pwd: Joi.string().required(),
-                    email: Joi.string().email().required()
-                }
-            }
-        }
+                    email: Joi.string().email().required(),
+                },
+            },
+        },
     },
     {
         method: 'GET',
@@ -39,8 +39,8 @@ module.exports = [
         handler: (request, reply) => Handler.getById(request.params.id, reply),
         config: {
             description: 'Create new user',
-            auth: 'jwt'
-        }
-    }
+            auth: 'jwt',
+        },
+    },
 
 ];
